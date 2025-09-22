@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/theme-dashboard/static/css/main.a7c978b3.css",
+    "main.js": "/theme-dashboard/static/js/main.7c3cb86f.js",
+    "index.html": "/theme-dashboard/index.html",
+    "main.a7c978b3.css.map": "/theme-dashboard/static/css/main.a7c978b3.css.map",
+    "main.7c3cb86f.js.map": "/theme-dashboard/static/js/main.7c3cb86f.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.a7c978b3.css",
+    "static/js/main.7c3cb86f.js"
+  ]
+}
