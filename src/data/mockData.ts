@@ -107,10 +107,10 @@ export const mockProducts: Product[] = [
 ];
 
 export const mockLocations: Location[] = [
-  { name: 'New York', revenue: '72K' },
-  { name: 'San Francisco', revenue: '39K' },
-  { name: 'Sydney', revenue: '25K' },
-  { name: 'Singapore', revenue: '61K' }
+  { name: "New York", revenue: "72k", coordinates: [-74.006, 40.7128], color: "#FFFFFF" },
+  { name: "San Francisco", revenue: "39k", coordinates: [-122.4194, 37.7749], color: "#FFFFFF" },
+  { name: "Sydney", revenue: "25k", coordinates: [151.2093, -33.8688], color: "#FFFFFF" },
+  { name: "Singapore", revenue: "61k", coordinates: [103.8198, 1.3521], color: "#FFFFFF" },
 ];
 
 export const mockNotifications: Notification[] = [

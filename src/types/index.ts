@@ -44,6 +44,8 @@ export interface Product {
 export interface Location {
   name: string;
   revenue: string;
+  coordinates: [number, number];
+  color?: string;
 }
 
 export interface Notification {

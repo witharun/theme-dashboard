@@ -12,6 +12,7 @@ import {
     mockProducts,
     mockLocations
 } from '../data/mockData';
+import { cn } from '../utils/cn';
 
 const Dashboard: React.FC = () => {
     const kpiData = useMemo(() => [
@@ -85,60 +86,71 @@ const Dashboard: React.FC = () => {
                     </h1>
                 </motion.div>
 
-                {/* KPI Cards Row */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
-                    {kpiData.map((kpi, index) => (
-                        <motion.div
-                            key={index}
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{
-                                duration: 0.5,
-                                delay: 0.2 + (index * 0.1),
-                                ease: [0.4, 0.0, 0.2, 1]
-                            }}
-                        >
-                            <KPICard
-                                title={kpi.title}
-                                value={kpi.value}
-                                change={kpi.change}
-                                changeType={kpi.changeType}
-                            />
-                        </motion.div>
-                    ))}
-                </div>
-
-                {/* Charts Row - Two equal columns */}
+                {/* 1st Row: KPI Cards + Bar Chart */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6">
+                    {/* KPI Cards (as one block inside col-1) */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 lg:gap-6 h-[252px]">
+                        {kpiData.map((kpi, index) => (
+                            <motion.div
+                                
+                                key={index}
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{
+                                    duration: 0.5,
+                                    delay: 0.2 + index * 0.1,
+                                    ease: [0.4, 0.0, 0.2, 1],
+                                }}
+                            >
+                                <KPICard
+                                    title={kpi.title}
+                                    value={kpi.value}
+                                    change={kpi.change}
+                                    changeType={kpi.changeType}
+                                    className={cn(
+                                        index === 0 || index === 3 ? "bg-blue-100 dark:bg-blue-100 " : ""
+                                    )}
+                                    highlight={index === 0 || index === 3}
+                                />
+                            </motion.div>
+                        ))}
+                    </div>
+
+                    {/* Bar Chart */}
                     <motion.div
-                        initial={{ opacity: 0, x: -20 }}
+                        
+                        initial={{ opacity: 0, x: 20 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ duration: 0.5, delay: 0.6 }}
                     >
                         <BarChartComponent data={mockChartData} dataKey="value" />
                     </motion.div>
+                </div>
+
+                {/* 2nd Row: Line Chart + Location Card */}
+                <div className="grid grid-cols-1 lg:grid-cols-[3fr_1fr] gap-4 lg:gap-6 ">
                     <motion.div
-                        initial={{ opacity: 0, x: 20 }}
+                        
+                        initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ duration: 0.5, delay: 0.7 }}
                     >
-                        <LineChartComponent data={mockRevenueData} />
+                        <LineChartComponent data={mockRevenueData}/>
                     </motion.div>
-                </div>
-
-                {/* Bottom Row - Three columns */}
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-6">
                     <motion.div
+                        
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5, delay: 0.8 }}
                     >
-                        <LocationCard
-                            title="Revenue by Location"
-                            locations={mockLocations}
-                        />
+                        <LocationCard title="Revenue by Location" locations={mockLocations} />
                     </motion.div>
+                </div>
+
+                {/* 3rd Row: DataTable + Pie Chart */}
+                <div className="grid grid-cols-1 lg:grid-cols-[3fr_1fr] gap-4 lg:gap-6 ">
                     <motion.div
+                        
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5, delay: 0.9 }}
@@ -150,6 +162,7 @@ const Dashboard: React.FC = () => {
                         />
                     </motion.div>
                     <motion.div
+                        
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5, delay: 1.0 }}
@@ -157,6 +170,7 @@ const Dashboard: React.FC = () => {
                         <PieChartComponent data={mockSalesData} />
                     </motion.div>
                 </div>
+
             </motion.div>
         </Layout>
     );

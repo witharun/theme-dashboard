@@ -1,9 +1,17 @@
-import React from 'react';
-import { cn } from '../../utils/cn';
+import React from "react";
+import {
+  ComposableMap,
+  Geographies,
+  Geography,
+  Marker,
+} from "react-simple-maps";
+import { cn } from "../../utils/cn";
 
 interface Location {
   name: string;
   revenue: string;
+  coordinates: [number, number]; // [longitude, latitude]
+  color?: string;
 }
 
 interface LocationCardProps {
@@ -12,67 +20,77 @@ interface LocationCardProps {
   className?: string;
 }
 
-const LocationCard: React.FC<LocationCardProps> = ({ title, locations, className }) => {
+// ✅ Correct World Atlas topojson file
+const geoUrl =
+  "https://unpkg.com/world-atlas@2.0.2/countries-110m.json";
+
+const LocationCard: React.FC<LocationCardProps> = ({
+  title,
+  locations,
+  className,
+}) => {
   return (
-    <div className={cn('card p-6 animate-fade-in', className)}>
+    <div className={cn("card p-6 animate-fade-in", className)}>
       <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
         {title}
       </h3>
-      
+
       {/* World Map with location pins */}
-      <div className="mb-6">
-        <div className="w-full h-32 bg-gray-50 dark:bg-gray-800 rounded-lg relative overflow-hidden">
-          <svg
-            viewBox="0 0 400 160"
-            className="w-full h-full"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            {/* World map outline */}
-            <path
-              d="M50 80 C 80 60, 120 70, 150 75 C 180 80, 220 85, 250 80 C 280 75, 320 70, 350 75"
-              stroke="currentColor"
-              strokeWidth="2"
-              fill="none"
-              className="text-gray-300 dark:text-gray-600"
-            />
-            <path
-              d="M50 100 C 80 90, 120 95, 150 100 C 180 105, 220 110, 250 105 C 280 100, 320 95, 350 100"
-              stroke="currentColor"
-              strokeWidth="2"
-              fill="none"
-              className="text-gray-300 dark:text-gray-600"
-            />
-            
-            {/* Location pins */}
-            {/* New York */}
-            <circle cx="120" cy="70" r="4" fill="#6C5DD3" className="animate-pulse" />
-            <circle cx="120" cy="70" r="8" fill="#6C5DD3" fillOpacity="0.2" />
-            
-            {/* San Francisco */}
-            <circle cx="80" cy="85" r="4" fill="#10B981" className="animate-pulse" />
-            <circle cx="80" cy="85" r="8" fill="#10B981" fillOpacity="0.2" />
-            
-            {/* Sydney */}
-            <circle cx="280" cy="120" r="4" fill="#F59E0B" className="animate-pulse" />
-            <circle cx="280" cy="120" r="8" fill="#F59E0B" fillOpacity="0.2" />
-            
-            {/* Singapore */}
-            <circle cx="200" cy="110" r="4" fill="#EF4444" className="animate-pulse" />
-            <circle cx="200" cy="110" r="8" fill="#EF4444" fillOpacity="0.2" />
-          </svg>
-        </div>
+      <div className="mb-6 w-full h-72 bg-gray-900 rounded-lg overflow-hidden">
+        <ComposableMap
+          projection="geoMercator"
+          projectionConfig={{ scale: 140 }}
+          width={800}
+          height={400}
+          className="w-full h-full"
+        >
+          {/* ✅ Proper world map */}
+          <Geographies geography={geoUrl}>
+            {({ geographies }) =>
+              geographies.map((geo) => (
+                <Geography
+                  key={geo.rsmKey}
+                  geography={geo}
+                  style={{
+                    default: {
+                      fill: "#374151", // gray-700
+                      stroke: "#1f2937", // gray-800
+                      strokeWidth: 0.5,
+                    },
+                    hover: { fill: "#4b5563" },
+                    pressed: { fill: "#6b7280" },
+                  }}
+                />
+              ))
+            }
+          </Geographies>
+
+          {/* Markers */}
+          {locations.map((loc, i) => (
+            <Marker key={i} coordinates={loc.coordinates}>
+              <circle
+                r={6}
+                fill={loc.color || "#6C5DD3"}
+                className="animate-pulse"
+              />
+              <circle
+                r={12}
+                fill={loc.color || "#6C5DD3"}
+                fillOpacity={0.2}
+              />
+            </Marker>
+          ))}
+        </ComposableMap>
       </div>
-      
+
       {/* Location list */}
       <div className="space-y-3">
         {locations.map((location, index) => (
           <div
             key={index}
-            className="flex items-center justify-between p-3 bg-gray-50 dark:bg-dark-700 rounded-lg hover:bg-gray-100 dark:hover:bg-dark-600 transition-colors duration-200"
+            className="flex items-center justify-between p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-dark-600 transition-colors duration-200"
           >
             <div className="flex items-center space-x-3">
-              <div className="w-2 h-2 bg-primary-500 rounded-full"></div>
               <span className="text-sm font-medium text-gray-900 dark:text-white">
                 {location.name}
               </span>
